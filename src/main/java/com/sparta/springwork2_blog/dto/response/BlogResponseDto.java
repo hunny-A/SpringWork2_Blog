@@ -1,4 +1,4 @@
-package com.sparta.springwork2_blog.dto;
+package com.sparta.springwork2_blog.dto.response;
 
 import com.sparta.springwork2_blog.entity.Blog;
 import lombok.Getter;

@@ -1,12 +1,14 @@
 package com.sparta.springwork2_blog.controller;
 
 
-import com.sparta.springwork2_blog.dto.BlogRequestDto;
-import com.sparta.springwork2_blog.dto.BlogResponseDto;
-import com.sparta.springwork2_blog.dto.MegResponseDto;
+import com.sparta.springwork2_blog.dto.request.BlogRequestDto;
+import com.sparta.springwork2_blog.dto.response.BlogResponseDto;
+import com.sparta.springwork2_blog.dto.response.MegResponseDto;
+import com.sparta.springwork2_blog.security.UserDetailsImpl;
 import com.sparta.springwork2_blog.service.BlogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,8 +23,8 @@ public class BlogController {
 
     /* 게시글 추가 */
     @PostMapping("/blogs")
-    public BlogResponseDto createBlog(@RequestBody BlogRequestDto requestDto, HttpServletRequest request){
-        return blogService.createBlog(requestDto,request);
+    public BlogResponseDto createBlog(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody BlogRequestDto requestDto, HttpServletRequest request){
+        return blogService.createBlog(userDetails.getUser(), requestDto,request);
     }
 
     /* 전체 게시글 조회 */
@@ -39,14 +41,14 @@ public class BlogController {
 
     /* 선택 게시글 수정 */
     @PutMapping("/blogs/{id}")
-    public BlogResponseDto updateBlog(@PathVariable Long id, @RequestBody BlogRequestDto requestDto, HttpServletRequest request){
-        return blogService.update(id, requestDto,request);
+    public BlogResponseDto updateBlog(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody BlogRequestDto requestDto, HttpServletRequest request){
+        return blogService.update(id, userDetails.getUser(), requestDto,request);
     }
 
     /* 선택 게시글 삭제 */
     @DeleteMapping("/blogs/{id}")
-    public ResponseEntity<MegResponseDto> deleteBlog(@PathVariable Long id, HttpServletRequest request){
-        return blogService.delete(id, request);
+    public ResponseEntity<MegResponseDto> deleteBlog(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails, HttpServletRequest request){
+        return blogService.delete(id, userDetails.getUser(), request);
     }
 
 }

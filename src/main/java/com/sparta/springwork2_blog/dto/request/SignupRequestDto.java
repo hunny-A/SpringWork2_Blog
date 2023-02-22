@@ -1,4 +1,4 @@
-package com.sparta.springwork2_blog.dto;
+package com.sparta.springwork2_blog.dto.request;
 
 
 import lombok.Getter;
@@ -19,5 +19,6 @@ public class SignupRequestDto {
     @Pattern(regexp = "(?=.*\\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{7,14}$",message = "알파벳 소문자와 대문자, 숫자를 이용해 최소 8문자 최대 15문자의 비밀번호를 만드세요.")
     private String password;
     private boolean admin = false;
+
     private String adminToken = "";
 }

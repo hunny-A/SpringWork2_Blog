@@ -1,9 +1,9 @@
 package com.sparta.springwork2_blog.service;
 
 
-import com.sparta.springwork2_blog.dto.LoginRequestDto;
-import com.sparta.springwork2_blog.dto.MegResponseDto;
-import com.sparta.springwork2_blog.dto.SignupRequestDto;
+import com.sparta.springwork2_blog.dto.request.LoginRequestDto;
+import com.sparta.springwork2_blog.dto.response.MegResponseDto;
+import com.sparta.springwork2_blog.dto.request.SignupRequestDto;
 import com.sparta.springwork2_blog.entity.User;
 import com.sparta.springwork2_blog.entity.UserRoleEnum;
 import com.sparta.springwork2_blog.jwt.JwtUtil;
@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
 @Service
@@ -24,6 +23,9 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
+
+    // ADMIN_TOKEN
+    private static final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
 
     /* 회원가입 */
     @Transactional
@@ -52,9 +54,25 @@ public class UserService {
                             .build());
         }
 
+        // 관리자 등록
+        UserRoleEnum role = UserRoleEnum.USER;
+
+        if(!signupRequestDto.getAdminToken().isEmpty()){    //AdminToken이 비어있지 않다면 실행
+            if(!signupRequestDto.getAdminToken().equals(ADMIN_TOKEN)){
+                return ResponseEntity.badRequest()
+                        .body(MegResponseDto.builder()
+                                .statusCode(HttpStatus.BAD_REQUEST.value())
+                                .msg("관리자 암호가 틀려 등록이 불가능합니다.")
+                                .build());
+            }
+            role = UserRoleEnum.ADMIN;
+        }
+
+
         userRepository.save(User.builder()
                 .username(username)
                 .password(password)
+                .role(role)
                 .build());
 
         return ResponseEntity.ok(MegResponseDto.builder()
@@ -91,7 +109,8 @@ public class UserService {
         // status : badRequest
         // body : MegResponseDto -> Code, msg
         HttpHeaders headers = new HttpHeaders();
-        headers.set(JwtUtil.AUTHORIZATION_HEADER,jwtUtil.createToken(user.get().getUsername()));
+        headers.set(JwtUtil.AUTHORIZATION_HEADER,jwtUtil.createToken(user.get().getUsername(), user.get().getRole()));
+        headers.set("AdminToken",String.valueOf(user.get().getRole()));
 
         return ResponseEntity.ok()
                 .headers(headers)

@@ -1,4 +1,4 @@
-package com.sparta.springwork2_blog.dto;
+package com.sparta.springwork2_blog.dto.request;
 
 import com.sparta.springwork2_blog.entity.User;
 import lombok.Getter;

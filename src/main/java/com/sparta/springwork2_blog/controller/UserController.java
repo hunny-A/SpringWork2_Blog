@@ -1,9 +1,9 @@
 package com.sparta.springwork2_blog.controller;
 
 
-import com.sparta.springwork2_blog.dto.LoginRequestDto;
-import com.sparta.springwork2_blog.dto.MegResponseDto;
-import com.sparta.springwork2_blog.dto.SignupRequestDto;
+import com.sparta.springwork2_blog.dto.request.LoginRequestDto;
+import com.sparta.springwork2_blog.dto.response.MegResponseDto;
+import com.sparta.springwork2_blog.dto.request.SignupRequestDto;
 import com.sparta.springwork2_blog.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

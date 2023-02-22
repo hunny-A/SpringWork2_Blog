@@ -1,7 +1,7 @@
 package com.sparta.springwork2_blog.entity;
 
 
-import com.sparta.springwork2_blog.dto.BlogRequestDto;
+import com.sparta.springwork2_blog.dto.request.BlogRequestDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -44,5 +44,4 @@ public class Blog extends Timestamped{
         this.contents = blogRequestDto.getContents();
         this.user = user;
     }
-
 }

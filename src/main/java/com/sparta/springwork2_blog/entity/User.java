@@ -32,10 +32,14 @@ public class User {
     @OneToMany(mappedBy = "user")   // Blog의 user 변수와  연관이 있다는 것을 알려준다.
     List<Blog> blogs = new ArrayList<>();
 
+    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private UserRoleEnum role;
 
     @Builder
-    public User(String username, String password) {
+    public User(String username, String password, UserRoleEnum role) {
         this.username = username;
         this.password = password;
+        this.role = role;
     }
 }
